@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
+<style>
         body {
             margin: 0;
             padding: 0;
@@ -9,35 +9,98 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            font-size: 50em;
+            font-size: 50vh;
             background-color: #000; /* Initial background color */
             color: #FFF; /* Text color */
+            position: relative; /* Set body to relative positioning */
+        }
+
+        #inputContainer {
+            position: absolute;
+            bottom: 1px;
+            left: 1px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        input {
+            margin: 0px 0;
+        }
+        p {
+            font-size: 10px;
+			color: #000;
+			margin:0 
         }
     </style>
 </head>
 <body>
     <span id="randomNumber">1</span>
-
+    <div id="inputContainer">
+		<p>Update interval (s). Set to '0' to fix update interval <p></p>
+        <p>Color: <input type="number" id="numberInterval" placeholder="Update Number Interval (s)" min="0" max="9"> 
+        Number: <input type="number" id="colorInterval" placeholder="Update Color Interval (s)" min="0" max="9"> </p>
+    </div>
     <script>
         // Array of primary colors
         const colors = ["#FF5733", "#3498DB", "#2ECC71", "#F1C40F", "#9B59B6", "#E74C3C", "#1ABC9C", "#D35400", "#8E44AD", "#27AE60"];
         const numberElement = document.getElementById("randomNumber");
+        const numberIntervalInput = document.getElementById("numberInterval");
+        const colorIntervalInput = document.getElementById("colorInterval");
 
-        function updatePage() {
-            // Generate a random number between 1 and 20
-            const randomNumber = Math.floor(Math.random() * 20) + 1;
-            
-            // Choose a random background color
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        let numberIntervalID;
+        let colorIntervalID;
 
-            // Update the page content and background color
-            numberElement.textContent = randomNumber;
-            document.body.style.backgroundColor = randomColor;
+        function updateNumber() {
+            const interval = parseInt(numberIntervalInput.value);
+
+            if (interval === 0) {
+                numberElement.style.display = "none";
+            } else {
+                numberElement.style.display = "block";
+                // Generate a random number between 1 and 20
+                const randomNumber = Math.floor(Math.random() * 20) + 1;
+                // Update the page content
+                numberElement.textContent = randomNumber;
+            }
         }
 
-        // Update the page initially and then every 3 seconds
-        updatePage();
-        setInterval(updatePage, 3000);
+        function updateColor() {
+            const interval = parseInt(colorIntervalInput.value);
+
+            if (interval === 0) {
+                document.body.style.backgroundColor = "#FFF";
+                document.body.style.color = "#000";
+            } else {
+                // Choose a random background color
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                // Update the background color
+                document.body.style.backgroundColor = randomColor;
+                document.body.style.color = "#FFF"; // Reset font color to white
+            }
+        }
+
+        // Set initial values for intervals
+        numberIntervalInput.value = 3; // 3 seconds
+        colorIntervalInput.value = 4; // 5 seconds
+
+        // Update the page initially and then according to the intervals
+        updateNumber();
+        numberIntervalID = setInterval(updateNumber, numberIntervalInput.value * 1000);
+
+        updateColor();
+        colorIntervalID = setInterval(updateColor, colorIntervalInput.value * 1000);
+
+        // Update intervals when input values change
+        numberIntervalInput.addEventListener('input', function() {
+            clearInterval(numberIntervalID);
+            numberIntervalID = setInterval(updateNumber, parseInt(numberIntervalInput.value) * 1000);
+        });
+
+        colorIntervalInput.addEventListener('input', function() {
+            clearInterval(colorIntervalID);
+            colorIntervalID = setInterval(updateColor, parseInt(colorIntervalInput.value) * 1000);
+        });
     </script>
 </body>
 </html>
