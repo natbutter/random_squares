@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 50em;
+            background-color: #000; /* Initial background color */
+            color: #FFF; /* Text color */
+        }
+    </style>
+</head>
+<body>
+    <span id="randomNumber">1</span>
+
+    <script>
+        // Array of primary colors
+        const colors = ["#FF5733", "#3498DB", "#2ECC71", "#F1C40F", "#9B59B6", "#E74C3C", "#1ABC9C", "#D35400", "#8E44AD", "#27AE60"];
+        const numberElement = document.getElementById("randomNumber");
+
+        function updatePage() {
+            // Generate a random number between 1 and 20
+            const randomNumber = Math.floor(Math.random() * 20) + 1;
+            
+            // Choose a random background color
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+            // Update the page content and background color
+            numberElement.textContent = randomNumber;
+            document.body.style.backgroundColor = randomColor;
+        }
+
+        // Update the page initially and then every 3 seconds
+        updatePage();
+        setInterval(updatePage, 3000);
+    </script>
+</body>
+</html>
